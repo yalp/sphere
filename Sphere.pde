@@ -4,6 +4,7 @@
 
 float angle = 0.0;
 float rSize;  // rectangle size
+float sRadius;  // sphere radius
 Vector vnew, axis, mouse;
 Quaternion vq, rotq, rotqc, rotqf;
 Vector[] points;
@@ -11,11 +12,12 @@ int N = 40;
 
 void setup() {
   size(640, 360, P3D);
-  rSize = width / 48;  
+  sRadius = min(width, height) / 4;
+  rSize = width / 48;
   noStroke();
   fill(204, 204);
   // Quaternion & vectors needed for rotation
-  axis = new Vector (1, -1, 1);
+  axis = new Vector();
   mouse = new Vector ();
   vq = new Quaternion ();
   rotq = new Quaternion();
@@ -70,7 +72,7 @@ void renderTiles(Vector p) {
   p.mult(rotqf, rotqc);
   // Draw the rectangle at the end of the rotated vector
   pushMatrix();
-  translate (p.x*100, p.y*100, p.z*100);
+  translate (p.x*sRadius, p.y*sRadius, p.z*sRadius);
   rect(-rSize, -rSize, rSize*2, rSize*2);
   popMatrix();
 }
@@ -81,5 +83,5 @@ void renderAxis() {
   line (0, 0, 0, mouse.x, mouse.y, mouse.z);
   // Draw the axis vector
   stroke(color(255, 0, 0));
-  line (0, 0, 0, axis.x*100, axis.y*100, axis.z*100);
+  line (0, 0, 0, axis.x*sRadius, axis.y*sRadius, axis.z*sRadius);
 }
