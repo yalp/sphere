@@ -1,8 +1,9 @@
 /**
- * Sphere
+ * Sphere, points distribution based on
+ * http://www.math.niu.edu/~rusin/known-math/97/spherefaq
  *
  */
- 
+
 float rotX = 0.0;
 float rSize;  // rectangle size
 
@@ -22,19 +23,26 @@ void draw() {
   }
   
   translate(width/2, height/2);
-  for (int j=0; j<10; j++) {
-    float rY = j * TWO_PI/10;
-    for (int i=0; i<10; i++) {
-      float rX = rotX + i * TWO_PI/10;
-      pushMatrix();
-      rotateX(rX);
-      rotateY(rY);
-      translate(0, 0, 100);
-      rotateY(-rY);
-      rotateX(-rX);
-      
-      rect(-rSize, -rSize, rSize*2, rSize*2);
-      popMatrix(); 
-    }
+  int N = 80;
+  float lastRY = 0;
+  for (int k = 1; k <= N; k++) {
+    float h = -1 + 2*(k-1)/(float)(N-1);
+    float rX = acos(h);
+    float rY;
+    if (k==1 || k==N) rY = 0;
+    else rY = (lastRY + 3.6 / sqrt ( N * (1 - h*h))) % TWO_PI;
+    lastRY = rY;
+    rX += rotX;
+    rY += rotX; // second rotation -> gimbal lock ! :-(
+    pushMatrix();
+    rotateX(rX);
+    rotateY(rY);
+    translate(0, 0, 100);
+    rotateY(-rY);
+    rotateX(-rX);
+    if (k==1) fill(color(255, 0, 0));
+    else fill(color(128, 128, 128));
+    rect(-rSize, -rSize, rSize*2, rSize*2);
+    popMatrix();
   }
 }
