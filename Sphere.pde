@@ -4,22 +4,31 @@
 
 float angle = 0.0;
 float rSize;  // rectangle size
-Vector v, vnew, axis;
+Vector vnew, axis;
 Quaternion vq, rotq, rotqc, rotqf;
+Vector[] points;
+int N = 40;
 
 void setup() {
   size(640, 360, P3D);
   rSize = width / 48;  
   noStroke();
   fill(204, 204);
-  axis = new Vector (1, 0, 1);
+  // Quaternion & vectors needed for rotation
+  axis = new Vector (1, -1, 1);
   axis.normalize();
-  v = new Vector (0, 100, 0);
-  vq = new Quaternion (v);
+  vq = new Quaternion ();
   rotq = new Quaternion();
   rotqc = new Quaternion();
   rotqf = new Quaternion();
   vnew = new Vector();
+  // Points randomly places then evenly distributed
+  points = new Vector[N];
+  for(int i=0; i<N; i++) {
+    points[i] = new Vector();
+    points[i].normalizedRandom();
+  }
+  distribute (points);
 }
 
 void draw() {
@@ -31,35 +40,35 @@ void draw() {
   }
   
   translate(width/2, height/2);
- 
-  compute();
-  render();
+
+  computeRotation();
+  renderAxis();
+  stroke(color(255, 255, 255));
+  for (int i=0; i<N; i++) {
+    renderTiles(points[i]);
+  }
 }
 
-void compute() {
+void computeRotation() {
   // Compute quaternion
   rotq.set (angle, axis);
   rotqc.conj(rotq);
-  rotqf.mult(rotq, vq);
-  vnew.mult(rotqf, rotqc);
 }
 
-void render () {
+void renderTiles(Vector p) {
+  // Apply rotation
+  vq.set(p);
+  rotqf.mult(rotq, vq);
+  vnew.mult(rotqf, rotqc);
+  // Draw the rectangle at the end of the rotated vector
+  pushMatrix();
+  translate (vnew.x*100, vnew.y*100, vnew.z*100);
+  rect(-rSize, -rSize, rSize*2, rSize*2);
+  popMatrix();
+}
+
+void renderAxis() {
   // Draw the axis vector
   stroke(color(255, 0, 0));
   line (0, 0, 0, axis.x*100, axis.y*100, axis.z*100);
-  // Draw the original vector and the rotated vector
-  stroke(color(255, 255, 255));
-  line (0, 0, 0, v.x, v.y, v.z);
-  line (0, 0, 0, vnew.x, vnew.y, vnew.z);
-  // Draw the rectangle at the end of the original vector
-  pushMatrix();
-  translate (v.x, v.y, v.z);
-  rect(-rSize, -rSize, rSize*2, rSize*2);
-  popMatrix();
-  // Draw the rectangle at the end of the rotated vector
-  pushMatrix();
-  translate (vnew.x, vnew.y, vnew.z);
-  rect(-rSize, -rSize, rSize*2, rSize*2);
-  popMatrix();
 }
