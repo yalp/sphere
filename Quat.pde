@@ -37,14 +37,20 @@ class Vector {
   }
 
   void normalizedRandom() {
-    x = random(2);
-    y = random(2);
-    z = random(2);
+    x = random(-2, 2);
+    y = random(-2, 2);
+    z = random(-2, 2);
     normalize();
   }
 
   void reset() {
     x = y = z = 0;
+  }
+  
+  void lerpVector(Vector v, float amt) {
+    x = lerp(x, v.x, amt);
+    y = lerp(y, v.y, amt);
+    z = lerp(z, v.z, amt);
   }
 }
 
