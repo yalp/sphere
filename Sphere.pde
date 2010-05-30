@@ -53,8 +53,10 @@ void draw() {
   translate(width/2, height/2);
   renderAxis();
   stroke(color(255, 255, 255));
+  color from = color(255, 128, 0);
+  color to = color(0, 128, 255);
   for (int i=0; i<N; i++) {
-    fill(color(128,(i*256)/N, 128));
+    fill(lerpColor(from, to, i/(float)N));
     renderTiles(points[i]);
   }
 }
