@@ -40,7 +40,10 @@ void draw() {
   mouse.x = mouseX-width/2;
   mouse.y = mouseY-height/2;
   mouse.z =0;
-  float l = mouse.length() / (max(width, height)/2);
+  float l = mouse.length() / (2*sRadius);
+  if (l > 0.5) {
+    l = 1 - l;
+  }
   if (l > 0.1) {
     l -= 0.1;
     angle = l / 10.0;
