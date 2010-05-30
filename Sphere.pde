@@ -40,26 +40,6 @@ void setup() {
 void draw() {
   background(0);
   
-  // Get mouse coords as a vector
-  mouse.x = mouseX-width/2;
-  mouse.y = mouseY-height/2;
-  mouse.z =0;
-  float l = mouse.length() / (2*sRadius);
-  if (l > 0.5) {
-    l = 1 - l;
-  }
-  if (l > 0.1) {
-    l -= 0.1;
-    angle = l / 10.0;
-    axis.x = -mouse.y;
-    axis.y = mouse.x;
-    axis.z = mouse.z;
-    axis.normalize();
-    computeRotation();
-  } else {
-    angle = 0;
-  }
-  
   translate(width/2, height/2);
   renderAxis();
   renderTiles();
@@ -134,6 +114,27 @@ void mouseClicked() {
       N--;
       updatePoints();
     }
+  }
+}
+
+void mouseMoved() {
+  mouse.x = mouseX-width/2;
+  mouse.y = mouseY-height/2;
+  mouse.z =0;
+  float l = mouse.length() / (2*sRadius);
+  if (l > 0.5) {
+    l = 1 - l;
+  }
+  if (l > 0.1) {
+    l -= 0.1;
+    angle = l / 10.0;
+    axis.x = -mouse.y;
+    axis.y = mouse.x;
+    axis.z = mouse.z;
+    axis.normalize();
+    computeRotation();
+  } else {
+    angle = 0;
   }
 }
 
