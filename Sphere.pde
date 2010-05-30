@@ -30,7 +30,7 @@ void setup() {
     points[i] = new Vector();
     points[i].normalizedRandom();
   }
-  distribute (points);
+  distribute (N, points);
 }
 
 void draw() {
@@ -86,4 +86,18 @@ void renderAxis() {
   // Draw the axis vector
   stroke(color(255, 0, 0));
   line (0, 0, 0, axis.x*sRadius, axis.y*sRadius, axis.z*sRadius);
+}
+
+void mouseClicked() {
+  if (mouseButton == LEFT) {
+    if (N < points.length) {
+      N++;
+      distribute(N, points);
+    }
+  } else if (mouseButton == RIGHT) {
+    if (N > 0) {
+      N--;
+      distribute(N, points);
+    }
+  }
 }

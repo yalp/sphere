@@ -43,9 +43,8 @@ void get_forces(int N, Vector[] f, Vector[] p)
   }
 }
 
-void distribute(Vector[] p0) {
+void distribute(int N, Vector[] p0) {
   int Nstep = 1000;
-  int N = p0.length;
   float step = 0.001;
   double minimal_step = 1e-10;
   Vector[] p1 = new Vector[N];
