@@ -41,13 +41,16 @@ void draw() {
   mouse.y = mouseY-height/2;
   mouse.z =0;
   float l = mouse.length() / (max(width, height)/2);
-  if (l > 0) {
-    angle = l / 25.0;
+  if (l > 0.1) {
+    l -= 0.1;
+    angle = l / 10.0;
     axis.x = -mouse.y;
     axis.y = mouse.x;
     axis.z = mouse.z;
     axis.normalize();
     computeRotation();
+  } else {
+    angle = 0;
   }
   
   translate(width/2, height/2);
@@ -69,9 +72,11 @@ void computeRotation() {
 
 void renderTiles(Vector p) {
   // Apply rotation
-  vq.set(p);
-  rotqf.mult(rotq, vq);
-  p.mult(rotqf, rotqc);
+  if (angle != 0) {
+    vq.set(p);
+    rotqf.mult(rotq, vq);
+    p.mult(rotqf, rotqc);
+  }
   // Draw the rectangle at the end of the rotated vector
   pushMatrix();
   translate (p.x*sRadius, p.y*sRadius, p.z*sRadius);
